@@ -26,12 +26,39 @@ function otu(number) {
   let id = samples.id;
     console.log("id: ", id);   
 
-  let selDataset = d3.select("#selDataset").text("James");
-    console.log("selDataset: ", selDataset);   
+  // let selDataset = d3.select("#selDataset").text("Jim");
+  //   console.log("selDataset says: ", selDataset);   
 
-  let sample_metadata = d3.select("#sample-metadata").text("Jim");
-    console.log("sample-metadata says: ", sample_metadata);   
 
+  let desiredSampleNumber = metadata.filter(sample =>
+    sample.id.toString() == id)[0];
+    console.log("desiredSampleNumber says: ", desiredSampleNumber);
+  
+    
+    //** Select an existing container (e.g., an SVG or HTML element) **//
+  let sample_metadata = d3.select("#sample-metadata");
+  //  sample_metadata.html('');
+    console.log("sample-metadata says: ", sample_metadata);
+
+    //**  Bind data to selection of sample-metadata **//
+  const selection = sample_metadata.selectAll('div')
+    .data(metadata, d => d.keys);
+    console.log("selection says: ", selection);    
+
+    //** Enter selection: append new div elements for data not yet bound **//
+  const enterSelection = selection.enter()
+    .append('div')
+    .text(d => `$(d.key):${d.value}`);
+    console.log("enterSelection says: ", enterSelection);    
+
+    //** Update selection (if needed): update existing elements **//
+  const updateSelection =   selection
+     .text(d=> `${d.key}:${d.value}`);
+     console.log("updateSelection says: ", updateSelection);    
+
+    //** Exit selection: remove and extra elements not bound to data **//
+  const exitSelection =   selection.exit().remove();
+  console.log("exitSelection says: ", exitSelection);    
   } );      
 
  setTimeout(function() {
@@ -45,12 +72,10 @@ function otu(number) {
 
 
     // Use d3 to select the panel with id of `#sample-metadata`
-  let sample_metadata = d3.select("#sample-metadata").text("Jim");
-    console.log("sample-metadata says: ", sample_metadata);   
-
+  
 
     // Use `.html("") to clear any existing metadata
-
+  
 
     // Inside a loop, you will need to use d3 to append new
     // tags for each key-value in the filtered metadata.
@@ -98,6 +123,9 @@ function init() {
 
     // Use d3 to select the dropdown with id of `#selDataset`
 
+
+    let selDataset = d3.select("#selDataset").text("Jim");
+    console.log("selDataset says: ", selDataset);   
 
     // Use the list of sample names to populate the select options
     // Hint: Inside a loop, you will need to use d3 to append a new

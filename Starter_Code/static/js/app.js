@@ -28,8 +28,10 @@ function buildMetadata(sample) {
         //// D3 includes the .append() function to add a new element to the HTML tag
         //// Hence, the key-value of the object defined by desiredObject is returned
         //// to the h6 heading tag.
-      Object.entries(desiredObject).forEach(([key, value]) => {
-        panel.append("h6").text(`${key}: ${value}`);
+      Object.entries(desiredObject).
+            forEach(([key, value]) => {
+                panel.append("h6")
+                .text(`${key}: ${value}`);
       });
     });
   }
@@ -64,6 +66,7 @@ function buildCharts(sample) {
         margin: { t: 0 },
         hovermode: "closest",
         xaxis: { title: "OTU ID" },
+        yaxis: { title: "Number of Bacteria" },
         margin: { t: 30}
       };
 
@@ -95,9 +98,8 @@ function buildCharts(sample) {
         //// Sliced and reversed above
       let barData = [
         {
-            x: sample_values.slice(0, 10).reverse(),
+            x: sample_values.slice(0, 10).reverse(),  //// reverse puts longer bars on top
             y: yticks,
-            text: otu_labels.slice(0, 10).reverse(),
             type: "bar",
             orientation: "h"
         }
@@ -114,35 +116,52 @@ function buildCharts(sample) {
     });
   }
   
-// Function to run on page load
-function init() {
+  // Function to run on page load
+    //// Called by "init()"; appearing below
+  function init() {
     d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
   
       // Get the names field
-  
+      let names = data.names;
   
       // Use d3 to select the dropdown with id of `#selDataset`
-  
+        //// The <select id="selDataset" onchange="optionChanged(this.value)"></select>
+        //// onChange is a function called when a user changed the selected option
+        //// of a <select> element.
+        //// optionChanged is a function defined below.
+      let selector = d3.select("#selDataset");
   
       // Use the list of sample names to populate the select options
       // Hint: Inside a loop, you will need to use d3 to append a new
       // option for each sample name.
-  
+
+      names.forEach((sample) => {
+        selector
+          .append("option")
+          .text(sample)
+          .property("value", sample);
+      });
   
       // Get the first sample from the list
-  
+        //// This is the initial sample shown in the "Test Subject ID Number"
+        //// when webpage initially displayed.
+      let firstSample = names[0];
   
       // Build charts and metadata panel with the first sample
-  
+        //// These are the initial bar and bubble charts shown 
+        //// when webpage initially displayed.    
+      buildCharts(firstSample);
+      buildMetadata(firstSample);
     });
   }
   
   // Function for event listener
   function optionChanged(newSample) {
     // Build charts and metadata panel each time a new sample is selected
-  
+    buildCharts(newSample);
+    buildMetadata(newSample);
   }
   
   // Initialize the dashboard
+    //// Calls the "init" function defined above
   init();
-  

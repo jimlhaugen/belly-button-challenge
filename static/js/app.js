@@ -15,7 +15,7 @@ function buildMetadata(sample) {
       // Use d3 to select the panel with id of `#sample-metadata`
         //// The <div id="sample-metadata" class="card card-body bg-light""></div>
       let panel = d3.select("#sample-metadata");
-  
+
       // Use `.html("") to clear any existing metadata
         //// Removes existing info in "Test Subject ID Number:" box
         //// from previous user-clicked sample.
@@ -28,10 +28,11 @@ function buildMetadata(sample) {
         //// D3 includes the .append() function to add a new element to the HTML tag
         //// Hence, the key-value of the object defined by desiredObject is returned
         //// to the h6 heading tag.
+        //// "toUpperCase" places all key characters in "Demographics Info" to upper case
       Object.entries(desiredObject).
             forEach(([key, value]) => {
                 panel.append("h6")
-                .text(`${key}: ${value}`);
+                .text(`${key.toUpperCase()}: ${value}`); 
       });
     });
   }
@@ -78,14 +79,14 @@ function buildCharts(sample) {
           marker: {
             size: sample_values,
             color: otu_ids,
-            colorscale: "Viridis"},
+            colorscale: "Earth"},
           text: otu_labels,
           mode: "markers"
         }   
       ];
   
       // Render the Bubble Chart
-      Plotly.newPlot("bubble", bubbleData, bubbleLayout);
+      Plotly.newPlot("bubble", bubbleData, bubbleLayout, {'displayModeBar': false});
  
                     /////////////   BAR CHART  /////////////
 
@@ -112,7 +113,7 @@ function buildCharts(sample) {
       };
   
       // Render the Bar Chart
-      Plotly.newPlot("bar", barData, barLayout);
+      Plotly.newPlot("bar", barData, barLayout, {'displayModeBar': false});
     });
   }
   
